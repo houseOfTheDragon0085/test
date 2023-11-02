@@ -1,27 +1,23 @@
 import streamlit as st
-import numpy as np
+import sympy as sym
 
-st.title("Linear Equation Solver")
+st.title("Algebraic Equation Solver with SymPy")
 
-st.write("Enter a linear system of equations as space-separated values (e.g., '3 -9; 2 4' * 'x y' = '-42 2', '1 -2 -1; 2 2 -1; -1 -1 2' * 'x y z' = '6 1 1'):")
+st.write("Enter an algebraic equation with symbolic variables (e.g., '2*x**2 + y + z = 1', 'x + 2*y + z = c1', '-2*x + y = -z'):")
 
 # User input for the equation
-equation_input = st.text_input("Linear System of Equations:")
+equation_input = st.text_input("Equation:")
+
+# Define symbolic variables
+x, y, z, c1 = sym.symbols('x y z c1')
 
 try:
-    # Split the input into matrices and vectors
-    matrices, variables_and_constants = equation_input.split('*')
+    # Parse and solve the equation
+    equations = [sym.Eq(*sym.sympify(eq.split('='))) for eq in equation_input.split(',')]
+    solutions = sym.solve(equations, (x, y, z))
 
-    coefficients = [list(map(float, matrix.strip().split())) for matrix in matrices.split(';')]
-    constants = list(map(float, variables_and_constants.split('=')))
-
-    # Parse matrices and vectors
-    A = np.array(coefficients)
-    b = np.array(constants)
-
-    # Solve the linear system of equations
-    x = np.linalg.solve(A, b)
-
-    st.write(f"Solutions for variables: {x}")
+    st.write("Solutions for x, y, z:")
+    for solution in solutions:
+        st.write(solution)
 except Exception as e:
-    st.error("Invalid Linear System of Equations")
+    st.error("Invalid Equation")
