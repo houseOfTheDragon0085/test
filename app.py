@@ -13,7 +13,7 @@ try:
     matrices, variables_and_constants = equation_input.split('*')
 
     coefficients = [list(map(float, matrix.strip().split())) for matrix in matrices.split(';')]
-    constants = list(map(float, variables_and_constants.split('='))
+    constants = list(map(float, variables_and_constants.split('=')))
 
     # Parse matrices and vectors
     A = np.array(coefficients)
