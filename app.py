@@ -14,7 +14,7 @@ try:
     coefficients, constants = equations[0].strip(), equations[1].strip()
 
     # Parse matrices and vectors
-    A = np.array(eval(coefficients.replace('[', '').replace(']', ''))
+    A = np.array(eval(coefficients.replace('[', '').replace(']', '')))
 
     b = np.array(eval(constants.replace('[', '').replace(']', ''))
 
