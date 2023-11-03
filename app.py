@@ -1,9 +1,10 @@
 import streamlit as st
 import sympy as sym
+import pandas as pd
 
-# Initialize a session_state variable to store data
-if 'data' not in st.session_state:
-    st.session_state.data = []
+# Initialize a session_state variable to store chat history
+if 'chat_history' not in st.session_state:
+    st.session_state.chat_history = []
 
 st.title("Algebraic Expression Solver")
 
@@ -42,16 +43,15 @@ if expression_input:
 
         st.write(f"Solver: {simplified_expr}")
 
-        # Store the expression and the simplified result
-        st.session_state.data.append((expression_input, simplified_expr))
+        # Store the expression and the simplified result in chat history
+        st.session_state.chat_history.append((expression_input, simplified_expr))
 
     except Exception as e:
         st.error("Invalid Expression")
 
-# Display previous inserts and answers in a chat-like format
+# Display chat history as a table
 st.write("Chat History:")
 
-if st.session_state.data:
-    for i, (expression, answer) in enumerate(st.session_state.data):
-        st.write(f"User: {expression}")
-        st.write(f"Solver: {answer}")
+if st.session_state.chat_history:
+    chat_df = pd.DataFrame(st.session_state.chat_history, columns=["User", "Solver"])
+    st.dataframe(chat_df, use_container_width=True)
