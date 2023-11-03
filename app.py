@@ -9,7 +9,7 @@ st.write("Enter an algebraic expression (e.g., 'x + y + x - y', '2x + 2x + 2y - 
 expression_input = st.text_input("Expression:")
 
 # Define symbolic variables
-x, y = sym.symbols('x y')
+x, y, z, a, b = sym.symbols('x y z a b')
 
 try:
     # Parse the expression
@@ -21,14 +21,14 @@ try:
     # Initialize a list to store solving steps
     solving_steps = [parsed_expr]
 
-    # Simplify the expression step by step
-    simplified_expr = parsed_expr
-    while True:
-        simplified = sym.simplify(simplified_expr)
-        if simplified == simplified_expr:
-            break  # No further simplification possible
-        simplified_expr = simplified
+    # Get the variables in the expression
+    variables = list(parsed_expr.free_symbols)
+
+    # Simplify the expression step by step for each variable
+    for var in variables:
+        simplified_expr = sym.simplify(parsed_expr, rational=True)
         solving_steps.append(simplified_expr)
+        parsed_expr = simplified_expr
 
     # Display step-by-step solving
     st.write("Solving steps:")
