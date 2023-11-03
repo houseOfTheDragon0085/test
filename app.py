@@ -10,7 +10,7 @@ st.title("Algebraic Expression Solver")
 st.write("Enter an algebraic expression (e.g., 'x + y + x - y', '2x + 2x + 2y - y'):")
 
 # User input for the expression
-expression_input = st.chat_input("User", "Type an expression...")
+expression_input = st.text_input("User Input:", "Type an expression...")
 
 # Define symbolic variables
 x, y = sym.symbols('x y')
