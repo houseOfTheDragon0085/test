@@ -47,8 +47,12 @@ try:
 except Exception as e:
     st.error("Invalid Expression")
 
-# Display a table with previous inserts and answers
-st.write("Previous Inserts and Answers:")
+# Display previous inserts and answers in a chat-like format
+st.write("Chat History:")
+
 if st.session_state.data:
     for i, (expression, answer) in enumerate(st.session_state.data):
-        st.write(f"Insert {i + 1}: Expression: {expression}, Answer: {answer}")
+        st.beta_container()
+        st.text(f"User: {expression}")
+        st.text(f"Solver: {answer}")
+        st.beta_container()
