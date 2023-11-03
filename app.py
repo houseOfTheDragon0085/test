@@ -4,7 +4,7 @@ import re
 
 st.title("Algebraic Expression Solver")
 
-st.write("Enter a sentence or question with an algebraic expression (e.g., 'Hi, can you solve 2x + 3 = 8', 'Calculate 2x + 2x'):")
+st.write("Enter a sentence or question with an algebraic expression following a colon (e.g., 'Please calculate: 2x + 3 = 8', 'Solve: 2x + 2x'):")
 
 # User input for the sentence/question
 user_input = st.text_input("Question:")
@@ -13,23 +13,35 @@ user_input = st.text_input("Question:")
 x = sym.Symbol('x')
 
 try:
-    # Use regular expressions to extract algebraic expressions from user input
-    matches = re.findall(r'(\d*\.*\d*\s*[a-zA-Z]\s*[\+\-\*/\(\)\^=\s]*)+', user_input)
+    # Use regular expressions to extract algebraic expressions after a colon
+    matches = re.findall(r':\s*(\d*\.*\d*\s*[a-zA-Z]\s*[\+\-\*/\(\)\^=\s]*)+', user_input)
 
     if matches:
         # Combine the extracted matches to form an expression
         expression = " ".join(matches)
 
-        # Parse and solve the expression
+        # Remove the colon and leading white spaces
+        expression = expression.lstrip(':').strip()
+
+        # Parse the expression
         parsed_expr = sym.sympify(expression)
         simplified_expr = sym.simplify(parsed_expr)
-        solution = sym.solve(simplified_expr, x)
 
         st.write(f"Original expression: {parsed_expr}")
         st.write(f"Simplified expression: {simplified_expr}")
+
+        # Solve the expression step by step
+        solution_steps = []
+        for step in sym.solve(parsed_expr, x, evaluate=False):
+            solution_steps.append(step)
+
         st.write(f"Solving steps:")
-        for step in sym.steps(solution):
-            st.write(step)
+        for i, step in enumerate(solution_steps):
+            st.write(f"Step {i + 1}: {step}")
+
+        # Find the final solution
+        solution = sym.solve(parsed_expr, x)
+
         st.write(f"Solution for x: {solution}")
     else:
         st.error("No algebraic expression found in the input.")
