@@ -3,7 +3,7 @@ import sympy as sym
 import spacy
 
 # Load the spaCy NLP model
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en")
 
 st.title("Algebraic Expression Solver")
 
