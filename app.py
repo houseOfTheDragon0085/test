@@ -1,9 +1,11 @@
 import streamlit as st
 import sympy as sym
 import spacy
+import en_core_web_sm
+
 
 # Load the spaCy NLP model
-nlp = spacy.load("en")
+nlp = en_core_web_sm.load()
 
 st.title("Algebraic Expression Solver")
 
