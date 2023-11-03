@@ -2,7 +2,4 @@ streamlit
 pandas
 sympy
 scipy
-tensorflow
-numpy
-matplotlib
-seaborn
+spacy
