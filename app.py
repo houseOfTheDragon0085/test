@@ -10,10 +10,10 @@ st.write("Enter a sentence or question with an algebraic expression following a 
 user_input = st.text_input("Question:")
 
 # Define symbolic variables
-x = sym.Symbol('x')
+x, y = sym.symbols('x y')
 
 try:
-    # Use regular expressions to extract algebraic expressions after a colon
+    # Use regular expressions to extract algebraic expressions following a colon
     matches = re.findall(r':\s*(\d*\.*\d*\s*[a-zA-Z]\s*[\+\-\*/\(\)\^=\s]*)+', user_input)
 
     if matches:
@@ -23,26 +23,24 @@ try:
         # Remove the colon and leading white spaces
         expression = expression.lstrip(':').strip()
 
+        # Replace '*' with Python-friendly multiplication symbol '**'
+        expression = expression.replace('*', '**')
+
         # Parse the expression
         parsed_expr = sym.sympify(expression)
         simplified_expr = sym.simplify(parsed_expr)
 
+        # Solve the expression
+        solution = sym.solve(parsed_expr, (x, y))
+
         st.write(f"Original expression: {parsed_expr}")
         st.write(f"Simplified expression: {simplified_expr}")
 
-        # Solve the expression step by step
-        solution_steps = []
-        for step in sym.solve(parsed_expr, x, evaluate=False):
-            solution_steps.append(step)
+        st.write("Solving steps:")
+        for step in sym.solve(parsed_expr, (x, y), manual=True):
+            st.write(step)
 
-        st.write(f"Solving steps:")
-        for i, step in enumerate(solution_steps):
-            st.write(f"Step {i + 1}: {step}")
-
-        # Find the final solution
-        solution = sym.solve(parsed_expr, x)
-
-        st.write(f"Solution for x: {solution}")
+        st.write(f"Solution for x and y: {solution}")
     else:
         st.error("No algebraic expression found in the input.")
 except Exception as e:
